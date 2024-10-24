@@ -12,25 +12,35 @@ function loadData() {
         row.insertCell(2).innerText = inventory[item].quantity;
     }
 
-    // Populate sales table and calculate total sales
+    // Populate sales table
     const salesTable = document.getElementById('salesTable');
-    let totalSales = 0; // Initialize total sales
     for (const date in sales) {
         for (const item in sales[date]) {
             const row = salesTable.insertRow();
             row.insertCell(0).innerText = date;
             row.insertCell(1).innerText = item;
             row.insertCell(2).innerText = sales[date][item];
+        }
+    }
+}
 
-            // Calculate total sales for each sale
+// Calculate total sales for the selected date
+function calculateTotalSalesForDate() {
+    const selectedDate = document.getElementById('salesDate').value;
+    const inventory = JSON.parse(localStorage.getItem('inventory')) || {};
+    const sales = JSON.parse(localStorage.getItem('sales')) || {};
+    let totalSales = 0;
+
+    if (sales[selectedDate]) {
+        for (const item in sales[selectedDate]) {
+            const quantitySold = sales[selectedDate][item];
             const costPrice = inventory[item] ? inventory[item].price : 0;
-            const quantitySold = sales[date][item];
-            totalSales += costPrice * quantitySold; // Update total sales
+            totalSales += costPrice * quantitySold; // Calculate total sales
         }
     }
 
-    // Display total sales
-    document.getElementById('totalSales').innerText = `Total Sales: ₹${totalSales.toFixed(2)}`; // Change to ₹
+    // Display total sales for the selected date
+    document.getElementById('totalSalesForDate').innerText = `Total Sales: ₹${totalSales.toFixed(2)}`; // Change to ₹
 }
 
 // Add item to inventory
@@ -67,4 +77,33 @@ function updateStock() {
     }
 }
 
-// Record
+// Record sale
+function recordSale() {
+    const saleDate = document.getElementById('saleDate').value;
+    const saleItemName = document.getElementById('saleItemName').value;
+    const quantitySold = parseInt(document.getElementById('quantitySold').value);
+
+    const inventory = JSON.parse(localStorage.getItem('inventory')) || {};
+    const sales = JSON.parse(localStorage.getItem('sales')) || {};
+
+    if (inventory[saleItemName] && inventory[saleItemName].quantity >= quantitySold) {
+        inventory[saleItemName].quantity -= quantitySold;
+        if (!sales[saleDate]) {
+            sales[saleDate] = {};
+        }
+        if (!sales[saleDate][saleItemName]) {
+            sales[saleDate][saleItemName] = 0;
+        }
+        sales[saleDate][saleItemName] += quantitySold;
+
+        localStorage.setItem('inventory', JSON.stringify(inventory));
+        localStorage.setItem('sales', JSON.stringify(sales));
+        
+        location.reload(); // Reload to update the tables
+    } else {
+        alert("Not enough stock or item not found.");
+    }
+}
+
+// Load data on page load
+window.onload = loadData;
