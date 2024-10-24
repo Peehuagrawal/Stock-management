@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Stock Management System</h1>
+
+        <h2>Add Item to Inventory</h2>
+        <input type="text" id="itemName" placeholder="Item Name" required>
+        <input type="number" id="itemPrice" placeholder="Price" step="0.01" required>
+        <button onclick="addItem()">Add Item</button>
+
+        <h2>Update Stock</h2>
+        <input type="text" id="updateItemName" placeholder="Item Name" required>
+        <input type="number" id="quantityChange" placeholder="Quantity Change" required>
+        <button onclick="updateStock()">Update Stock</button>
+
+        <h2>Record Sale</h2>
+        <input type="date" id="saleDate" required>
+        <input type="text" id="saleItemName" placeholder="Item Name" required>
+        <input type="number" id="quantitySold" placeholder="Quantity Sold" required>
+        <button onclick="recordSale()">Record Sale</button>
+
+        <h2>Inventory</h2>
+        <table id="inventoryTable">
+            <tr>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Quantity</th>
+            </tr>
+        </table>
+
+        <h2>Sales</h2>
+        <table id="salesTable">
+            <tr>
+                <th>Date</th>
+                <th>Item</th>
+                <th>Quantity Sold</th>
+            </tr>
+        </table>
+    </div>
+    <h2>Total Sales</h2>
+    <p id="totalProfit">Total Sales: ₹0.00</p>
+
+    <script src="script.js"></script>
+</body>
+</html>
